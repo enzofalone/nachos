@@ -1,0 +1,29 @@
+PROJECT 0
+
+Enzo Falone
+
+a) When installing Nachos in @ocelot.aul.fiu.edu using CentOS 8 I had to get familiarized with new commands such as "wget" and also ran into an issue where I had to use the "--no-check-certificate" flag as we were fetching data from an "http" URL. After that, I was able to decompress and get the expected outputs. I did not run into any additional issues as the system already provided me with gcc and make.
+
+b) When running the userprog demo with all the tests, I experienced an error (core dumped) on the sort program which was the expected output but also in the shell program which was not the expected output. Additionally, I tested /test/halt using single step mode and saw how different addresses were being accessed and stored memory every time I pressed enter.
+
+c) The threads class initializes threads through Nachos and creates system calls to the operating system. This class allows to use different arguments to execute programs and even randomize how threads will be used throughout its runtime.
+
+Javier Garcia
+
+a) The experience installing Nachos was straight-forward. I installed Nachos v3.4 on using the machine ocelot.aul.fiu.edu. I followed the steps to retrieve, build, and run Nachos as described in the assignment. After downloading and unpacking the Nachos distribution, I navigated to the nachos-3.4/code directory and executed make to compile the source code. The build process completed successfully without any errors.
+
+b) After building Nachos, I ran the threads demo and the output was the same as the one shown in the assignment. Then, I navigated to the userprog subdirectory of Nachos and ran the halt user program. The output was as expected based on the source code. Finally, I added the -s flag to the command for running the user program halt. This showed me the step-by-step execution and introduced me to single-stepping.
+
+c) The Thread class in Nachos represents a unit of sequential execution within a program. This class manages the state of a thread, including the program counter, processor registers, and execution stack. It provides basic thread operations such as Fork to start a new thread, Yield to relinquish the CPU, Sleep to suspend execution, and Finish to signal the completion of the thread’s task.
+
+Franco Remy
+
+a) I manage to install Nachos v3.4 source code without any issues on the fiu linux server. I then manage to download the Nachos distribution and go over how the
+directory structure to see how it is organized. After understanding it's structure, I then unpacked, and compiled Nachos using mkdir, od, tar commands.
+After verifying my enviroment path, I took the time to look into the subdirectories for it's documentation.
+
+b) I then managed to run the threads demo and achieving the same output provided in the project 0 description. I then ran the userprog demo and looked through
+the output to see if it's how it should be. After that, I looked into how I can manage the Nachos single step mode.
+
+c) The Nachos Thread class allows for interacting, creating, and managing threads in a program. With commands like fork, we can create threads that executes
+instructions side by side other threads and main thread. 

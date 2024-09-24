@@ -24,6 +24,26 @@ int testnum = 1;
 //	purposes.
 //----------------------------------------------------------------------
 
+#ifdef HW1_SEMAPHORES
+int SharedVariable;
+
+void SimpleThread(int which) {
+    int num, val;
+
+    for(num = 0; num < 5; num++) {
+        val = SharedVariable;
+        printf("*** thread %d sees value %d\n", which, val);
+        currentThread->Yield();
+        SharedVariable = val+1;
+        currentThread->Yield();
+    }
+
+    val = SharedVariable;
+
+    printf("Thread %d sees final value %d\n", which, val);
+}
+#else
+
 void
 SimpleThread(int which)
 {
@@ -34,6 +54,8 @@ SimpleThread(int which)
         currentThread->Yield();
     }
 }
+
+#endif
 
 //----------------------------------------------------------------------
 // ThreadTest1
