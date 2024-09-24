@@ -11,6 +11,7 @@
 
 #include "copyright.h"
 #include "system.h"
+#include "synch.h"
 
 // testnum is set in main.cc
 int testnum = 1;
@@ -26,15 +27,30 @@ int testnum = 1;
 
 #ifdef HW1_SEMAPHORES
 int SharedVariable;
+int numThreadsActive; // used to implement barrier upon completion
+
+Semaphore *semaphore = new Semaphore("SimpleThread Semaphore", 1);
 
 void SimpleThread(int which) {
     int num, val;
 
     for(num = 0; num < 5; num++) {
+        // Entry section
+        semaphore->P();
         val = SharedVariable;
         printf("*** thread %d sees value %d\n", which, val);
         currentThread->Yield();
         SharedVariable = val+1;
+
+        // Exit section
+        semaphore->V();
+        currentThread->Yield();
+    }
+
+    // Decrement numThreadsActive
+    numThreadsActive--;    
+    // Check if numThreadsActive is zero, if not yield using while loop
+    while(numThreadsActive != 0) {
         currentThread->Yield();
     }
 
@@ -81,7 +97,6 @@ ThreadTest1()
 
 #ifdef HW1_SEMAPHORES
 
-int numThreadsActive; // used to implement barrier upon completion
 
 void
 ThreadTest(int n) {

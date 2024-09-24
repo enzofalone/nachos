@@ -1,0 +1,23 @@
+PROJECT 1
+
+Enzo Falone
+
+EXERCISE 1
+
+For ThreadTest(int n) with values 0 through 4 I was able to see that n=0,1 would return the same output due to the for loop that 
+iterates from 1 to n and it also calls SimpleThread(0). For values 2-4 I saw that all threads go in order to increase their value to 5 
+for every thread. I was surprised by this behavior as I was expecting the SharedVariable to be used across threads as we were only 
+forking the function and supposed anything outside would be owned by the main process.
+
+Using semaphores, I was able to see that now the SharedVariable would work as intended, being shared across all threads and being
+incremented by one for every thread in order. With ThreadTest(4) the value would reach 20. However, by using the `-rs` option I was
+able to see a much randomized and not synchronized order of operations by using random seed 123 as an example. After yielding until
+all threads were done this problem would not occur anymore. The only variation is which thread prints that it saw the final value
+which is expected.
+
+EXERCISE 2
+
+EXERCISE 3
+
+EXERCISE 4
+
