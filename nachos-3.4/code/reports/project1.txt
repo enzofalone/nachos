@@ -17,6 +17,14 @@ which is expected.
 
 EXERCISE 2
 
+As described in the project description, locks are very similar to semaphores. It uses a queue in order to append in order
+all threads that are awaiting to use a certain function and making them sleep, until the previous thread releases the lock
+and wakes up the next thread to use the function.
+
+The difference between the semaphore and lock is that a lock only accomodates one thread prior to locking (we use the variable free)
+the semaphore on the other side, allows for n amount of threads to be inside the semaphore prior to making other threads in the queue 
+sleep.
+
 EXERCISE 3
 
 EXERCISE 4

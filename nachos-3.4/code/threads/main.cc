@@ -64,6 +64,8 @@ extern void ThreadTest(int n), Copy(char *unixFile, char *nachosFile);
 #else
 extern void ThreadTest(void), Copy(char *unixFile, char *nachosFile);
 #endif
+extern void SemaphorePing(void);
+extern void LockTest(void);
 extern void ElevatorTest(int numFloors, int numPersons);
 extern void Ping();
 extern void Print(char *file), PerformanceTest(void);
@@ -110,7 +112,10 @@ main(int argc, char **argv)
 #if defined(CHANGED) && defined(HW1_CONDITION)
 	Ping();
 #elif defined(HW1_SEMAPHORES)
-	ThreadTest(threadTestNum);
+	// ThreadTest(threadTestNum);
+	SemaphorePing();
+#elif defined(HW1_LOCKS)
+	LockTest();
 #else
     ThreadTest();
 #endif
