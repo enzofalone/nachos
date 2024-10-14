@@ -27,5 +27,10 @@ sleep.
 
 EXERCISE 3
 
+All the Condition operations have been implemented correctly. The task was to implement condition variables for thread synchronization 
+in the synch.cc file. This involved writing five key functions: a constructor to initialize condition objects, a destructor to deallocate them, 
+Wait to make a thread wait on a condition while releasing a lock, Signal to wake up one waiting thread, and Broadcast to wake up all waiting threads. 
+These operations ensure that threads coordinate properly by waiting for and signaling each other when specific conditions are met.
+
 EXERCISE 4
 
