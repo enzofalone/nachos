@@ -53,8 +53,6 @@
 #include "utility.h"
 #include "system.h"
 
-#define HW1_ELEVATOR
-
 #ifdef THREADS
 extern int testnum;
 #endif
@@ -112,20 +110,17 @@ main(int argc, char **argv)
       }
     }
 
-#if defined(CHANGED) && defined(HW1_CONDITION)
+#if defined(HW1_CONDITION)
 	Ping();
 #elif defined(HW1_SEMAPHORES)
 	// ThreadTest(threadTestNum);
 	SemaphorePing();
 #elif defined(HW1_LOCKS)
 	LockTest();
+#elif defined(HW1_ELEVATOR)
+	ElevatorTest(5, 5);
 #else
     ThreadTest();
-#endif
-
-
-#if defined(CHANGED) && defined(HW1_ELEVATOR)
-	ElevatorTest(5, 5);
 #endif
 
 
