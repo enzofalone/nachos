@@ -53,12 +53,15 @@
 #include "utility.h"
 #include "system.h"
 
+#define HW1_ELEVATOR
+
 #ifdef THREADS
 extern int testnum;
 #endif
 
 // External functions used by this file
 #ifdef HW1_SEMAPHORES
+
 int threadTestNum = 4;
 extern void ThreadTest(int n), Copy(char *unixFile, char *nachosFile);
 #else

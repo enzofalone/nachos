@@ -34,3 +34,8 @@ These operations ensure that threads coordinate properly by waiting for and sign
 
 EXERCISE 4
 
+For ElevatorTest, I managed to write the logic for how the elevator should work. A person is able to hail the elevator, those who are in are able to get out, and those
+who are out are able to get in. The issue currently is unable to build a working solution for managing the hails of the elevator. For the current state of the program, out
+of five people, all five can hail the elevator, but the elevator Wait never wakes and the thread completes with no issue. I've tried work arounds with the Signaling and Waits
+but I've only managed to get the elevator working for one person where it arrives to the person, takes people who are in out, and people who are out in, the elevator moves up
+and then the thread breaks.

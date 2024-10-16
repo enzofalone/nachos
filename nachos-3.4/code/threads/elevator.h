@@ -21,8 +21,10 @@ public:
     ~ELEVATOR();
     void hailElevator(Person *p);
     void start();
+    bool activePersons();
 
 private:
+    int numberOfFloors;
     int currentFloor;
     Condition **entering;
     Condition **leaving;
@@ -30,7 +32,7 @@ private:
     int occupancy;
     int maxOccupancy;
     Lock *elevatorLock;
-
+    Condition *elevatorWaiting;
 };
 
 #endif
