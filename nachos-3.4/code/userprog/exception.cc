@@ -223,7 +223,10 @@ int doKill (int pid) {
     
     // 1. Check if the pid is valid and if not, return -1
     PCB* targetPCB = pcbManager->GetPCB(pid);
-    if (targetPCB == NULL) return -1;
+    if (targetPCB == NULL) {
+        printf("Process [%d] cannot kill process [%d]: doesn't exist\n", ownPID, pid);
+        return -1;
+    }
 
     // 2. IF pid is self, then just exit the process
     if (targetPCB == currentThread->space->pcb) {
@@ -240,7 +243,7 @@ int doKill (int pid) {
     
     // Check if removal was successful
     if (removeSuccess == -1) {
-        printf("Process [%d] could not find thread [%d]", ownPID, pid);
+        printf("Process [%d] cannot kill process [%d]: doesn't exist\n", ownPID, pid);
         return -1;
     }
 

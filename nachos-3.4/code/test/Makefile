@@ -35,7 +35,7 @@ CPP = gcc -m32 -E
 INCDIR =-I../userprog -I../threads
 CFLAGS = -G 0 -c $(INCDIR)
 
-all: create exit halt shell matmult sort fork kill
+all: create exit halt shell matmult sort fork kill kill_random
 
 start.o: start.s ../userprog/syscall.h
 	$(CPP) $(CPPFLAGS) start.c > strt.s
@@ -89,4 +89,11 @@ kill.o: kill.c
 kill: kill.o start.o
 	$(LD) $(LDFLAGS) start.o kill.o -o kill.coff
 	../bin/coff2noff kill.coff kill
+
+kill_random.o: kill_random.c
+	$(CC) $(CFLAGS) -c kill_random.c
+kill_random: kill_random.o start.o
+	$(LD) $(LDFLAGS) start.o kill_random.o -o kill_random.coff
+	../bin/coff2noff kill_random.coff kill_random
+
 
