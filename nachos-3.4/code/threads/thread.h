@@ -72,6 +72,7 @@ extern void ThreadPrint(int arg);
 //    
 //  Some threads also belong to a user address space; threads
 //  that only run in the kernel have a NULL address space.
+class AddrSpace;
 
 class Thread {
   private:

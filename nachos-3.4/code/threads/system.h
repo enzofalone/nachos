@@ -38,6 +38,7 @@ extern Machine* machine;	// user program memory and registers
 extern MemoryManager* mm;
 extern Lock* mmLock;
 extern PCBManager* pcbManager;
+extern Lock* pcbManagerLock;
 #endif
 
 #ifdef FILESYS_NEEDED 		// FILESYS or FILESYS_STUB

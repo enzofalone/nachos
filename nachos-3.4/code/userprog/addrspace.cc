@@ -94,7 +94,7 @@ AddrSpace::AddrSpace(OpenFile *executable)
 
     DEBUG('a', "Initializing address space, num pages %d, size %d\n",
 					numPages, size);
-// first, set up the translation
+    // first, set up the translation
     pageTable = new TranslationEntry[numPages];
     for (i = 0; i < numPages; i++) {
         pageTable[i].virtualPage = i;	// for now, virtual page # = phys page #
@@ -123,6 +123,8 @@ AddrSpace::AddrSpace(OpenFile *executable)
 			noffH.initData.virtualAddr, noffH.initData.size);
         ReadFile(executable, noffH.initData.inFileAddr, noffH.initData.virtualAddr, noffH.initData.size);
     }
+
+    printf("Loaded Program: [%d] code | [%d] data | [%d] bss\n", noffH.code.size, noffH.initData.size, noffH.uninitData.size);
     valid = true;
 }
 
@@ -193,11 +195,15 @@ AddrSpace::AddrSpace(AddrSpace* space) {
 
 //----------------------------------------------------------------------
 // AddrSpace::~AddrSpace
-// 	Dealloate an address space.  Nothing for now!
+// 	Deallocate an address space.
 //----------------------------------------------------------------------
 
-AddrSpace::~AddrSpace()
-{
+AddrSpace::~AddrSpace() {
+    // Clear the space used for other processes to use 
+    // the same space in the future
+    for (int i = 0; i < numPages; i++) {
+        mm->DeallocatePage(pageTable[i].physicalPage);
+    }
    delete pageTable;
 }
 
@@ -242,7 +248,11 @@ AddrSpace::InitRegisters()
 //----------------------------------------------------------------------
 
 void AddrSpace::SaveState()
-{}
+{
+    // store into AddrSpace
+    pageTable = machine->pageTable;
+    numPages = machine->pageTableSize;
+}
 
 //----------------------------------------------------------------------
 // AddrSpace::RestoreState
