@@ -76,7 +76,7 @@ AddrSpace::AddrSpace(OpenFile *executable)
         return;
     }
 
-// how big is address space?
+    // how big is address space?
     size = noffH.code.size + noffH.initData.size + noffH.uninitData.size
 			+ UserStackSize;	// we need to increase the size
 						// to leave room for the stack
@@ -204,7 +204,7 @@ AddrSpace::~AddrSpace() {
     for (int i = 0; i < numPages; i++) {
         mm->DeallocatePage(pageTable[i].physicalPage);
     }
-   delete pageTable;
+    delete pageTable;
 }
 
 //----------------------------------------------------------------------

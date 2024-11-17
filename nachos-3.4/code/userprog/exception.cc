@@ -25,6 +25,9 @@
 #include "system.h"
 #include "syscall.h"
 #include "system.h"
+#include "console.h"
+#include "addrspace.h"
+#include "synch.h"
 
 //----------------------------------------------------------------------
 // ExceptionHandler
@@ -52,6 +55,8 @@
 
 void doExit(int status) {
     int pid = currentThread->space->pcb->pid;
+    printf("System Call: [%d] invoked [Exit]\n", pid);
+
     currentThread->space->pcb->exitStatus = status;
 
     printf ("Process [%d] exits with [%d]\n", pid, status);
@@ -118,12 +123,14 @@ int doFork(int functionAddr) {
     childThread->space = childAddrSpace;
 
     // 5. Create a PCB for the child and connect it all up
-    // set parent for child pcb
-    // add child for parent pcb
-    // initialize pcb in childAddSpace
+    // initialize pcb in childAddrSpace
     PCB *childPCB = pcbManager->AllocatePCB();
     childPCB->thread = childThread;
+
+    // set parent for child pcb
     childPCB->parent = currentThread->space->pcb;
+
+    // add child for parent pcb
     currentThread->space->pcb->AddChild(childPCB);
     childAddrSpace->pcb = childPCB;
 
@@ -131,6 +138,7 @@ int doFork(int functionAddr) {
     machine->WriteRegister(PCReg, functionAddr);
     machine->WriteRegister(PrevPCReg, functionAddr - 4);
     machine->WriteRegister(NextPCReg, functionAddr + 4);
+
     childThread->SaveUserState();
     
     // 7. Restore register state of parent user-level process
@@ -141,7 +149,7 @@ int doFork(int functionAddr) {
 
     // print message for child creation (pid,  pcreg, currentThread->space->GetNumPages())
     int pcreg = machine->ReadRegister(PCReg);
-    printf("Process [%d] Fork: start at address [0x%x] with [%d] pages memory\n", pid, pcreg, numPages);
+    printf("Process [%d] Fork: start at address [0x%x] with [%d] pages memory\n", pid, pcreg, currentThread->space->GetNumPages());
 
     // 9. return pcb->pid;
     return childPCB->pid;
@@ -196,24 +204,25 @@ int doExec(char* filename) {
 
 
 int doJoin(int pid) {
-
     // 1. Check if this is a valid pid and return -1 if not
-    // PCB* joinPCB = pcbManager->GetPCB(pid);
-    // if (pcb == NULL) return -1;
+    PCB* joinPCB = pcbManager->GetPCB(currentThread->space->pcb->pid);
+    if (joinPCB == NULL) return -1;
+
+    printf("System Call: [%d] invoked [Join]\n", currentThread->space->pcb->pid);
 
     // 2. Check if pid is a child of current process
-    // PCB* pcb = currentThread->space->pcb;
-    // if (pcb != joinPCB->parent) return -1;
+    PCB* pcb = currentThread->space->pcb;
+    if (pcb != joinPCB->parent) return -1;
 
     // 3. Yield until joinPCB has not exited
-    // while(!joinPCB->hasExited) currentThread->Yield();
+    while(!joinPCB->HasExited()) currentThread->Yield();
 
     // 4. Store status and delete joinPCB
-    // int status = joinPCB->exitStatus;
-    // delete joinPCB;
+    int status = joinPCB->exitStatus;
+    delete joinPCB;
 
     // 5. return status;
-
+    return status;
 }
 
 
@@ -252,18 +261,12 @@ int doKill (int pid) {
     return 0;
 }
 
-
-
 void doYield() {
     int pid = currentThread->space->pcb->pid;
     printf("System Call: [%d] invoked [Yield]\n", pid);
 
     currentThread->Yield();
 }
-
-
-
-
 
 // This implementation (discussed in one of the videos) is broken!
 // Try and figure out why.

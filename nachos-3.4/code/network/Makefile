@@ -634,7 +634,7 @@ exception.o: ../userprog/exception.cc /usr/include/stdc-predef.h \
  ../machine/timer.h ../userprog/memorymanager.h ../threads/synch.h \
  ../userprog/pcbmanager.h ../filesys/synchdisk.h ../machine/disk.h \
  ../network/post.h ../machine/network.h ../threads/synchlist.h \
- ../userprog/syscall.h
+ ../userprog/syscall.h ../machine/console.h ../userprog/addrspace.h
 progtest.o: ../userprog/progtest.cc /usr/include/stdc-predef.h \
  ../threads/copyright.h ../threads/system.h ../threads/copyright.h \
  ../threads/utility.h ../threads/bool.h ../machine/sysdep.h \

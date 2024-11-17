@@ -59,7 +59,6 @@ int PCBManager::DeallocatePCB(PCB* pcb) {
     // Release pcbManagerLock
     pcbManagerLock->Release();
 
-
     return 0;
 }
 

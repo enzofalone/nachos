@@ -609,7 +609,8 @@ exception.o: ../userprog/exception.cc /usr/include/stdc-predef.h \
  ../filesys/openfile.h ../threads/synch.h ../threads/list.h \
  ../threads/scheduler.h ../machine/interrupt.h ../machine/stats.h \
  ../machine/timer.h ../userprog/memorymanager.h ../threads/synch.h \
- ../userprog/pcbmanager.h ../userprog/syscall.h
+ ../userprog/pcbmanager.h ../userprog/syscall.h ../machine/console.h \
+ ../userprog/addrspace.h
 progtest.o: ../userprog/progtest.cc /usr/include/stdc-predef.h \
  ../threads/copyright.h ../threads/system.h ../threads/copyright.h \
  ../threads/utility.h ../threads/bool.h ../machine/sysdep.h \
