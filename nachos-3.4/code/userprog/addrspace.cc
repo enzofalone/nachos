@@ -76,7 +76,7 @@ AddrSpace::AddrSpace(OpenFile *executable)
         return;
     }
 
-    // how big is address space?
+// how big is address space?
     size = noffH.code.size + noffH.initData.size + noffH.uninitData.size
 			+ UserStackSize;	// we need to increase the size
 						// to leave room for the stack
@@ -87,6 +87,8 @@ AddrSpace::AddrSpace(OpenFile *executable)
         valid = false;
         return;
     }
+    
+    printf("Loaded Program: [%d] code | [%d] data | [%d] bss\n", noffH.code.size, noffH.initData.size, noffH.uninitData.size);
 
     // Allocate a new PCB for the address space
     pcb = pcbManager->AllocatePCB();
@@ -94,7 +96,7 @@ AddrSpace::AddrSpace(OpenFile *executable)
 
     DEBUG('a', "Initializing address space, num pages %d, size %d\n",
 					numPages, size);
-    // first, set up the translation
+// first, set up the translation
     pageTable = new TranslationEntry[numPages];
     for (i = 0; i < numPages; i++) {
         pageTable[i].virtualPage = i;	// for now, virtual page # = phys page #
@@ -116,27 +118,31 @@ AddrSpace::AddrSpace(OpenFile *executable)
     if (noffH.code.size > 0) {
         DEBUG('a', "Initializing code segment, at 0x%x, size %d\n",
 			noffH.code.virtualAddr, noffH.code.size);
-        ReadFile(executable, noffH.code.inFileAddr, noffH.code.virtualAddr, noffH.code.size);
+        int counter = 0;
+        while( counter < noffH.code.size) {
+
+            executable->ReadAt(&(machine->mainMemory[Translate(noffH.code.virtualAddr+counter)]),
+                1, noffH.code.inFileAddr+counter);
+            counter++;
+        }
     }
     if (noffH.initData.size > 0) {
         DEBUG('a', "Initializing data segment, at 0x%x, size %d\n",
 			noffH.initData.virtualAddr, noffH.initData.size);
-        ReadFile(executable, noffH.initData.inFileAddr, noffH.initData.virtualAddr, noffH.initData.size);
+        int counter = 0;
+        while( counter < noffH.initData.size) {
+        	executable->ReadAt(&(machine->mainMemory[Translate(noffH.initData.virtualAddr+counter)]),
+				1, noffH.initData.inFileAddr+counter);
+            counter++;
+        }
+
     }
 
-    printf("Loaded Program: [%d] code | [%d] data | [%d] bss\n", noffH.code.size, noffH.initData.size, noffH.uninitData.size);
     valid = true;
-}
 
 
-void AddrSpace::ReadFile(OpenFile *file, int offset, int virtualAddr, int size) {
-    int counter = 0;
-    while( counter < size) {
-        file->ReadAt(&(machine->mainMemory[Translate(virtualAddr+counter)]),
-            1, offset+counter);
-        counter++;
-    }
 }
+
 
 TranslationEntry* AddrSpace::GetPageTable() {
     return pageTable;
@@ -195,13 +201,12 @@ AddrSpace::AddrSpace(AddrSpace* space) {
 
 //----------------------------------------------------------------------
 // AddrSpace::~AddrSpace
-// 	Deallocate an address space.
+// 	Dealloate an address space.  Nothing for now!
 //----------------------------------------------------------------------
 
-AddrSpace::~AddrSpace() {
-    // Clear the space used for other processes to use 
-    // the same space in the future
-    for (int i = 0; i < numPages; i++) {
+AddrSpace::~AddrSpace()
+{
+    for(int i = 0; i<numPages; i++){
         mm->DeallocatePage(pageTable[i].physicalPage);
     }
     delete pageTable;
@@ -248,11 +253,7 @@ AddrSpace::InitRegisters()
 //----------------------------------------------------------------------
 
 void AddrSpace::SaveState()
-{
-    // store into AddrSpace
-    pageTable = machine->pageTable;
-    numPages = machine->pageTableSize;
-}
+{}
 
 //----------------------------------------------------------------------
 // AddrSpace::RestoreState
@@ -277,3 +278,4 @@ unsigned int AddrSpace::Translate(unsigned int virtualAddr) {
         int physicalAddr = frameNumber*PageSize + pageOffset;
         return physicalAddr;
 }
+

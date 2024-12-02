@@ -101,10 +101,10 @@ int doFork(int functionAddr) {
 
     // 1. Check if sufficient memory exists to create new process
     unsigned int numPages = currentThread->space->GetNumPages();
-
     unsigned int capacity = mm->GetFreePageCount();
+
     // if check fails, return -1
-    if (numPages > capacity) {
+    if (numPages >= capacity) {
         printf("Process [%d] Fork Error: Not sufficient memory\n", pid);
         return -1;
     }
@@ -153,8 +153,9 @@ int doFork(int functionAddr) {
 }
 
 int doExec(char* filename) {
-
     // Use progtest.cc:StartProcess() as a guide
+    int pid = currentThread->space->pcb->pid;
+    printf("System Call: [%d] invoked [Exec]\n", pid);
 
     // 1. Open the file and check validity
     OpenFile *executable = fileSystem->Open(filename);
@@ -180,6 +181,7 @@ int doExec(char* filename) {
     printf("Could not create AddrSpace\n");
         return -1;
     }
+    printf("Exec Program: [%d] loading [%s]\n", pid, filename);
 
     // 6. Set the PCB for the new addrspace - reused from deleted address space
     space->pcb = pcb;
@@ -195,7 +197,7 @@ int doExec(char* filename) {
 
     // 10. Run the machine now that all is set up
     machine->Run();			// jump to the user progam
-    ASSERT(FALSE); // Execution nevere reaches here
+    ASSERT(FALSE); // Execution never reaches here
 
     return 0;
 }

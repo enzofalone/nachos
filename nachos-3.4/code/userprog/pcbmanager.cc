@@ -27,11 +27,11 @@ PCB* PCBManager::AllocatePCB() {
     int pid = bitmap->Find();
 
     // Release pcbManagerLock
-    pcbManagerLock->Release();
 
     ASSERT(pid != -1);
 
     pcbs[pid] = new PCB(pid);
+    pcbManagerLock->Release();
 
     return pcbs[pid];
 
