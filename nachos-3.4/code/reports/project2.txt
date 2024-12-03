@@ -10,8 +10,10 @@ This project implements different system calls such as fork, yield, exec, kill, 
 and deallocating memory in the address space with the use of different processes in order for applications to be ran sucessfully using the nachos operating system. In order to make these system calls, we had to learn about processes,
 memory allocation using the PCB manager, registers, address spaces, threads and applying previous implementations such as locks that were created in project 1 in order to end up implementing the PCBManager.
 
-All of the system calls are implemented in exception.cc and all system calls (fork, yield, kill, join, exit) except for exec work correctly as we get a not sufficient memory error when forking in the test. We assume this issue is because of a wrong allocation of 
-memory and we could not proceed in how to further fix this issue. On the bright side, error handling seems to work correctly for memory allocation.
+All of the system calls are implemented in exception.cc and all system calls (fork, yield, kill, join, exit) except for exec work correctly as we get an error when opening the file and then proceeded by a non sufficient memory error. We believe the issue lies with the path string itself
+being passed to the exec method and for this reason it is unable to find the file. An attempt to solve this by a team member resulted in a permission error related to a gcc call within the test/makefile thought to belong to the fiu hosted enviroment causing a partially complete build
+of nachos.
+
 
 Tests can be ran by compiling nachos under /code and executing the following:
 
